@@ -23,7 +23,7 @@ u4 = U(4); %d_th1 (throttle 1)
 
 %--------------------------CONSTANTS---------------------------------------
 %Nominal Vehicle constants
-m = 120000; %aircraft total mass (kg)
+m = 20000; %aircraft total mass (kg)
 %NOTE: we will define Ib and invIb later
 
 cbar = 6.6;                 %mean aerodynamic chord (m)
@@ -43,10 +43,6 @@ Zac = 0;                    %z position of AC in Fm (m)
 Xapt1 = 0;                  %x position of engine 1 force in Fm (m)
 Yapt1 = 0;              %y position of engine 1 force in Fm (m)
 Zapt1 = -1.9;               %z position of engine 1 force in Fm (m)
-
-%Xapt2 = 0;                  %x position of engine 2 force in Fm (m)
-%Yapt2 = 7.94;               %y position of engine 2 force in Fm (m)
-%Zapt2 = -1.9;               %z position of engine 2 force in Fm (m)
 
 %Other constants
 rho = 1.225;                %air density (kg/m^3)
@@ -185,23 +181,17 @@ MAcg_b = MAac_b + cross(FA_b, rcg_b - rac_b);
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine
 F1 = u4*m*g;
-%F2 = u5*m*g;
 
 %assuming engine thrust is aligned with Fb, we have
 FE1_b = [F1;0;0];
-%FE2_b = [F2;0;0];
 
-FE_b = FE1_b; %+ FE2_b;
+FE_b = FE1_b; 
 
 %now engine moment due to offset of engine thrust from CG
 mew1 = [Xcg - Xapt1; Yapt1 - Ycg; Zcg - Zapt1];
 
-%mew2 = [Xcg - Xapt2; Yapt2 - Ycg; Zcg - Zapt2];
-
 MEcg1_b = cross(mew1, FE1_b);
-%MEcg2_b = cross(mew2, FE2_b);
 
-%MEcg_b = MEcg1_b + MEcg2_b;
 MEcg_b = MEcg1_b;
 %-------------------9. GRAVITY EFFECTS------------------------------------
 g_b = [-g*sin(x8); g*cos(x8)*sin(x7); g*cos(x8)*cos(x7)];
@@ -228,8 +218,6 @@ x4to6dot = invIb*(Mcg_b - cross(wbe_b, Ib*wbe_b));
 H_phi = [1 sin(x7)*tan(x8) cos(x7)*tan(x8); 0 cos(x7) -sin(x7); 0 sin(x7)/cos(x8) cos(x7)/cos(x8)];
 
 x7to9dot = H_phi*wbe_b;
-
-
 
 %place in first order form
 
