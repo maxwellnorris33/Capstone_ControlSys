@@ -1,0 +1,6 @@
+function [XDOT] = rsys_model(X, U)
+
+rsys = load('reduced_ss@85ms_straight_and_level.mat'); %input the reduced model here
+XDOT = rsys.rsys.A
+end
+

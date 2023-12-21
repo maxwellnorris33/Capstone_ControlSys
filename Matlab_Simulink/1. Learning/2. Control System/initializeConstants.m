@@ -5,25 +5,23 @@ close all
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @36m/s
-x0 = [36; %inital speed
+x0 = [85; %inital speed
+    0;
+    1.268;
     0;
     0;
     0;
     0;
-    0;
-    0;
-    0; 
+    0.0149; 
     0];
 
-% x0 = [84.9905; 0; 1.2713; 0; 0; 0; 0; 0.0150; 0];
-% uo = [0; -0.1780; 0; 0.0821; 0.0821];
 
 %initial control surface deflections
 %input IC trim point for straight and level flight @100m/s
 uo = [0;
-    -0.16444;
+    -0.17797;
     0;
-    0.17012];
+    0.16418];
 
 %control surface disturbance preset (simulated step input   
 udist = [10;
@@ -41,7 +39,7 @@ lon0 = convert_coordinates(157, 51, 29.1348);
 h0 = 1000;
 
 %desired airspeed
-va = 60;
+va = 85;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;

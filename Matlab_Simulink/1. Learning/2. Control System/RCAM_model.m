@@ -23,7 +23,7 @@ u4 = U(4); %d_th1 (throttle 1)
 
 %--------------------------CONSTANTS---------------------------------------
 %Nominal Vehicle constants
-m = 20000; %aircraft total mass (kg)
+m = 120000; %aircraft total mass (kg)
 %NOTE: we will define Ib and invIb later
 
 cbar = 6.6;                 %mean aerodynamic chord (m)
