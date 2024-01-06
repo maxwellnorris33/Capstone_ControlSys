@@ -19,10 +19,8 @@ D = linearizedSS.linsys1.D;
 sys = ss(A, B, C, D);
 
 %truncating system
-rsys = modred(sys, [2;4;5;6;7;8;9], "Truncate"); 
-% x1 (uvel), x2 (vvel), x3(wvel),x4 (roll rate), x5 (pitch rate), x6(yaw rate), x7 (roll ang), x8 (pitch ang), 
-% x9 (yaw ang), x10 (altitude)  
-
+rsys = modred(sys, [2;4;6;7;9], "Truncate"); 
+% only states x1 (uvel), x2 (zvel), x5 (pitch rate), x8 (pitch ang). x10 (altitude) remaining 
 % will use the reduced system to design K gains matrix
 
 A = rsys.A;
@@ -46,25 +44,23 @@ end
 %will need to trial and error with the below five poles to see which will
 %yield a K matrix which will behave the way we want it to with the reduced
 %system
-p1 = -0.8;
-p2 = -0.5;
-p3 = -0.22;
-p4 = -0.25;
-p5 = -0.04;
-p6 = -0.04;
 
-K = place(A, B, [p1, p2, p3])
+p1 = -0.11;
+p2 = -0.01;
+p3 = -0.2;
+p4 = -0.2;
+p5 = -0.15;
 
+K = place(A, B, [p1, p2, p3, p4, p5])
 %close loop system with new K controller
 cloop_sys = ss(A-B*K, B, C, D, 0);
-%pzplot(cloop_sys)
+pzplot(cloop_sys)
 
 save('k_gains', "K")
 
 %if the above plot is stable, save the the above K gains into file to be
 %used in the simulation
 
-%run this script to initialize variables for RCAM_MIMO_implementation
 
 %getting statespace from the full model linearization
 linear_sys = load("rcam_linearized_ss@85ms_straight_and_level.mat").linsys1;
@@ -83,18 +79,19 @@ x0 = [85; %inital speed
     0;
     0;
     0.0149; 
-    0];
+    0;
+    500];
 
 %initial control surface deflections
 %input IC trim point for straight and level flight @85m/s
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    -0.177972111;
+    -0.17797;
     0;
     0.16418];
 
-TF = 10*60; %how long the sim runs for
+TF = 20*60; %how long the sim runs for
 
 %k gain
 k_gain = load("k_gains.mat");
@@ -105,7 +102,7 @@ lat0 = convert_coordinates(21, 18, 56.1708);
 lon0 = convert_coordinates(157, 51, 29.1348);
 
 %initial plane altitude (m)
-h0 = 0;
+h0 = 1000;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;
@@ -118,7 +115,7 @@ u3min = -30*pi/180;
 u3max = 30*pi/180;
 
 u4min = 0;
-u4max = 20*pi/180;
+u4max = 10*pi/180;
 
 
 
