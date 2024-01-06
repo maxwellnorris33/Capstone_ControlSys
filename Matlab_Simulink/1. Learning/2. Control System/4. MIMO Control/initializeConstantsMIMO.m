@@ -15,16 +15,14 @@ C = linearizedSS.linsys1.C;
 D = linearizedSS.linsys1.D;
 
 %synthesizing matlab statespace system
-
 sys = ss(A, B, C, D);
 
 %truncating system
 rsys = modred(sys, [2;4;5;6;7;8;9], "Truncate"); 
-% x1 (uvel), x2 (vvel), x3(wvel),x4 (roll rate), x5 (pitch rate), x6(yaw rate), x7 (roll ang), x8 (pitch ang), 
-% x9 (yaw ang), x10 (altitude)  
+% x1 (uvel), x3(wvel), x10 (altitude) remaining as these will be measurable
+% states
 
 % will use the reduced system to design K gains matrix
-
 A = rsys.A;
 B = rsys.B;
 C = rsys.C;
@@ -43,20 +41,25 @@ end
 %plot poles
 %pzplot(rsys)
 
-%will need to trial and error with the below five poles to see which will
+%will need to trial and error with the below poles to see which will
 %yield a K matrix which will behave the way we want it to with the reduced
 %system
-p1 = -0.8;
-p2 = -0.5;
-p3 = -0.22;
-p4 = -0.25;
-p5 = -0.04;
-p6 = -0.04;
+
+%for x-vel,z-vel, alt
+p1 = -0.12;
+p2 = -0.8;
+p3 = -0.12;
+
+%for x-vel, pitchrate and alt
+% p1 = -0.6;
+% p2 = -0.0000001;
+% p3 = -0.8;
 
 K = place(A, B, [p1, p2, p3])
 
 %close loop system with new K controller
 cloop_sys = ss(A-B*K, B, C, D, 0);
+%plotting close loop poles to determine stability
 %pzplot(cloop_sys)
 
 save('k_gains', "K")
@@ -94,7 +97,7 @@ uo = [0;
     0;
     0.16418];
 
-TF = 10*60; %how long the sim runs for
+TF = 3*60; %how long the sim runs for
 
 %k gain
 k_gain = load("k_gains.mat");
@@ -105,7 +108,7 @@ lat0 = convert_coordinates(21, 18, 56.1708);
 lon0 = convert_coordinates(157, 51, 29.1348);
 
 %initial plane altitude (m)
-h0 = 0;
+h0 = 500;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;
