@@ -117,7 +117,12 @@ MAcg_b = MAac_b + cross(FA_b, rcg_b - rac_b);
 
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine
-F1 = (0.16-0.871*u4+6.42*u4^2)*g;
+if u4<22
+    F1 = u4*2.1-0.18;
+else
+    F1 = (0.16-0.871*u4+6.42*u4^2)*g;
+end
+
 
 %assuming engine thrust is aligned with Fb, we have
 FE1_b = [F1;0;0];
