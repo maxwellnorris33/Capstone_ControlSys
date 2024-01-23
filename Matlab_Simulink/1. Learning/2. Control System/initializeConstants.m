@@ -38,6 +38,9 @@ lon0 = convert_coordinates(157, 51, 29.1348);
 %initial plane altitude (m)
 h0 = 1000;
 
+%initial vertical speed
+vd_o = 0;
+
 %desired airspeed
 va = 85;
 
