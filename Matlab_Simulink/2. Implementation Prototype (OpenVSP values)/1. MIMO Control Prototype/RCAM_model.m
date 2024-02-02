@@ -19,12 +19,10 @@ u1 = U(1); %d_A (aileron) +is right roll
 u2 = U(2); %d_T (stabilizer) +is down deflection
 u3 = U(3); %d_R (rudder) +is right deflection
 u4 = U(4); %d_th1 (throttle 1)
-%u5 = U(5); %d_th2 (throttle 2)
 
 %--------------------------CONSTANTS---------------------------------------
 %Nominal Vehicle constants
 m = 7; %aircraft total mass (kg) %NEED THIS
-%NOTE: we will define Ib and invIb later
 
 cbar = 0.22283;                 %mean aerodynamic chord (m)
 S = 0.51220761;                    %wing planform area (m^2)
@@ -32,16 +30,16 @@ b = 2.176;
 
 Xcg = 0.0934;            %x position of CoG in Fm (m) %THIS IS REFERENCE TO THE NOSE, NEED TO SUBTRACT BY DISTANCE TO THE LEADING EDGE FOR FM
 Ycg = 0;                    %y position of CoG in Fm (m)
-Zcg = 0;            %z position of CoG in Fm (m) %NEED THIS
+Zcg = -0.02;            %z position of CoG in Fm (m) %NEED THIS
 
 Xac = 0.09856;            %x position of AC in Fm (m)
-Yac = 0;                    %y position of AC in Fm (m)
+Yac = 0.001;                    %y position of AC in Fm (m)
 Zac = 0;                    %z position of AC in Fm (m)
 
 %Engine Constants %NEED THIS
-Xapt1 = 0.840;                  %x position of engine 1 force in Fm (m)
+Xapt1 = 0.75531;                 %est rn %x position of engine 1 force in Fm (m)
 Yapt1 = 0;              %y position of engine 1 force in Fm (m)
-Zapt1 = 0;               %z position of engine 1 force in Fm (m)
+Zapt1 = -0.02;               %z position of engine 1 force in Fm (m)
 
 %Other constants
 rho = 1.225;                %air density (kg/m^3)
@@ -66,43 +64,49 @@ V_b = [x1;x2;x3];
 %----------------------3. AERODYNAMIC FORCE COEFFICIENTS-------------------
 %coeffs from openVSP is in windframe, need to rotate to body frame
 
+%NEED NEW CURVES
+
 %total lift force
-CL = 0.539+5.240*alpha;
+if alpha <=0.3875
+    CL = 0.539+5.240*(alpha);
+else
+    CL = -100*((alpha)-0.43)^2+2.75;
+end
 
 %Total Drag Force (neglecting tail)
-CD = 0.0367+0.302*alpha;
+CD = 0.03 + 0.07*(5.5*(alpha) + 0.654)^2;
 
 %Calculating Sideforce
-CY = -0.176*beta - 0.0423*u3;
+CY = -0.176*(beta) - 0.0423*u3;
 
 %----------------------4. DIMENSIONAL AERODYNICAL FORCES-------------------
-%calculate the actual dimensional forces. These are in Fs
+%calculate the actual dimensional forces. These are in Fw
 
-FA_s = [-CD*Q*S; CY*Q*S; -CL*Q*S];
+FA_w = [-CD*Q*S; CY*Q*S; -CL*Q*S];
 
 %rotate these forces to Fb
-C_bs = [cos(alpha) 0 -sin(alpha); 0 1 0; sin(alpha) 0 cos(alpha)];
-FA_b = C_bs*FA_s;
+C_bw = [cos(beta)*cos(alpha) -sin(beta)*cos(alpha) -sin(alpha); sin(beta) cos(beta) 0; cos(beta)*sin(alpha) -sin(beta)*sin(alpha) cos(alpha)];
+FA_b = C_bw*FA_w;
 
 %--------------------6. AERODYNAMIC MOMENT ABOUT CG------------------------
 %normalize to aerodynamic moment about cog
-MAcg_b = [(0.518*beta+0.292*u1)*b; (0.0623-0.126*alpha+2.651*u2)*cbar; (-0.0403*beta+0.105*u3)*b]*Q*S;
 
-%m/qsc=c
-
-% rcg_b = [Xcg;Ycg;Zcg];
-% rac_b = [Xac; Yac; Zac];
-% MAcg_b = MAac_b + cross(FA_b, rcg_b - rac_b);
+%NEED NEW CURVES, HAD TO ROTATE GIVEN MOMENT CURVES FROM WIND TO BODY FRAME
+MAcg_b = [(0.518*(x9-beta)+0.292*u1)*cbar; 
+    (0.0623-0.126*(x8-alpha)+2.651*u2-2.91*x5)*cbar; 
+    (-0.0403*(x9-beta)+0.105*u3)*cbar]*Q*S;
 
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine
-
-if u4<0.22
-    F1 = u4*2.1-0.18;
+if u4 <= 0
+    F1 = 0;
+elseif u4<0.22 & u4>0
+    F1 = 1.2*u4;
 else
     F1 = 6.457*u4^2-0.9309*u4+0.1751;
 end
-F1 = u4*g; %convert thrust test curve from kg to N
+
+F1 = F1*g; %convert thrust test curve from kg to N
 
 %assuming engine thrust is aligned with Fb, we have
 FE1_b = [F1;0;0];
@@ -122,11 +126,14 @@ Fg_b = m*g_b;
 
 %-------------------10. STATE DERIVATIVES---------------------------------
 %inertia matrix
-Ib = m*[100 0 -10; 0 600 0; -10 0 1000]; %NEED THIS
+Ib = m*[0.0802 0 0.108; 
+        0 0.175 0; 
+        0.108 0 0.1084]; %NEED THIS
 
 %inverse of inertia matrix
-invIb = (1/m)*[0.0249836 0 0.000523151; 0 0.015625 0; 0.000523151 0 0.010019];
-invIb = Ib^-1;
+invIb = (1/m)*[-36.4944 0 36.3597; 
+    0 5.7143 0; 
+     36.3597 0 -27.0005];
 
 %form f_b and calculate udot, vdot, wdot
 F_b = Fg_b + FE_b + FA_b;

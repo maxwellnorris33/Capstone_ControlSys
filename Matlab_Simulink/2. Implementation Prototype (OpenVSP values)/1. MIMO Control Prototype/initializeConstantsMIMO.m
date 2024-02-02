@@ -55,7 +55,7 @@ p3 = -0.12;
 % p2 = -0.0000001;
 % p3 = -0.8;
 
-K = place(A, B, [p1, p2, p3])
+K = place(A, B, [p1, p2, p3]);
 
 %close loop system with new K controller
 cloop_sys = ss(A-B*K, B, C, D, 0);
@@ -78,7 +78,7 @@ D = linear_sys.D;
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [14; %inital speed
+x0 = [17; %inital speed
     0;
     0;
     0;
@@ -93,11 +93,11 @@ x0 = [14; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    -10*3.14/180;
+    -0.2*3.14/180;
     0;
-    0];
+    0.8];
 
-TF = 8*60; %how long the sim runs for
+TF = 10*60; %how long the sim runs for
 
 %k gain
 k_gain = load("k_gains.mat");
