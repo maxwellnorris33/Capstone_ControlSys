@@ -67,14 +67,14 @@ V_b = [x1;x2;x3];
 %NEED NEW CURVES
 
 %total lift force
-if alpha <=0.3875
-    CL = 0.539+5.240*(alpha);
+if alpha <=0.1396
+    CL = 0.5171 + 5.1289*alpha;
 else
-    CL = -100*((alpha)-0.43)^2+2.75;
+    CL = -325.7*alpha^3 + 187.55*alpha^2 - 33.32*alpha + 3.115;
 end
 
 %Total Drag Force (neglecting tail)
-CD = 0.03 + 0.07*(5.5*(alpha) + 0.654)^2;
+CD = 0.0338 + 0.0592*CL^2;
 
 %Calculating Sideforce
 CY = -0.176*(beta) - 0.0423*u3;
@@ -92,9 +92,11 @@ FA_b = C_bw*FA_w;
 %normalize to aerodynamic moment about cog
 
 %NEED NEW CURVES, HAD TO ROTATE GIVEN MOMENT CURVES FROM WIND TO BODY FRAME
-MAcg_b = [(0.518*(x9-beta)+0.292*u1)*cbar; 
-    (0.0623-0.126*(x8-alpha)+2.651*u2-2.91*x5)*cbar; 
-    (-0.0403*(x9-beta)+0.105*u3)*cbar]*Q*S;
+MAcg_w = [(0.0498849*beta+0.5630736*x4+0.2814754*u1); %roll
+    (0.0567244-0.1194170*alpha-8.9756*x5+0.2262949*u2); %pitch
+    (-0.0395123*(beta)+0.0595315*x6+0.0347290*u3)]*Q*S*cbar; %yaw
+
+MAcg_b = C_bw*MAcg_w;
 
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine

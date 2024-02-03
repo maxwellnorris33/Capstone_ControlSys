@@ -78,7 +78,7 @@ D = linear_sys.D;
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [17; %inital speed
+x0 = [19; %inital speed
     0;
     0;
     0;
@@ -93,9 +93,9 @@ x0 = [17; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    -0.2*3.14/180;
     0;
-    0.8];
+    0;
+    0];
 
 TF = 10*60; %how long the sim runs for
 
