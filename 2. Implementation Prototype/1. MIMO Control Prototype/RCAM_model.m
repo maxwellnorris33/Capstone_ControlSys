@@ -92,11 +92,12 @@ FA_b = C_bw*FA_w;
 %normalize to aerodynamic moment about cog
 
 %NEED NEW CURVES, HAD TO ROTATE GIVEN MOMENT CURVES FROM WIND TO BODY FRAME
-MAcg_w = [(0.0498849*beta+0.5630736*x4+0.2814754*u1); %roll
-    (0.0567244-0.1194170*alpha-8.9756*x5+0.2262949*u2); %pitch
-    (-0.0395123*(beta)+0.0595315*x6+0.0347290*u3)]*Q*S*cbar; %yaw
+MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
+    (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
+    (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
-MAcg_b = C_bw*MAcg_w;
+%C_bs = [cos(alpha) 0 -sin(alpha); 0 1 0; sin(alpha) 0 cos(alpha)];
+MAcg_b = C_bw*MAcg_w ;
 
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine

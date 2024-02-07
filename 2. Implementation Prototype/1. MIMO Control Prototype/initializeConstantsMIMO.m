@@ -93,9 +93,9 @@ x0 = [19; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
+    2.83*3.14/180;
     0;
-    0;
-    0];
+    0.35];
 
 TF = 10*60; %how long the sim runs for
 
