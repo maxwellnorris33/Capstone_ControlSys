@@ -15,9 +15,9 @@ close all
 %     -0.14682; %approx 5.73 deg pitch up
 %     0];
 
-x0 = [84.9905; 0; 1.2713; 0; 0; 0; 0; 0.0150; 0];
+x0 = [84.9905; 0; 0; 0; 0; 0; 0; 0; 0];
 
-uo = [0; -0.1780; 0; 0.0821; 0.0821];
+uo = [0; 0; 0; 0; 0];
 
 %initial control surface deflections
 %input IC trim point for straight and level flight @235m/s

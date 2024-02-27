@@ -7,7 +7,7 @@ close all
 clc
 
 %extracting statespace A, B, C and D matrix
-linearizedSS = load('rcam_linearized_ss@20ms_straight_and_level.mat'); %varname is linsys1
+linearizedSS = load('rcam_linearized_ss@85ms_straight_and_level.mat'); %varname is linsys1
 
 A = linearizedSS.linsys1.A;
 B = linearizedSS.linsys1.B;
@@ -18,8 +18,8 @@ D = linearizedSS.linsys1.D;
 sys = ss(A, B, C, D);
 
 %truncating system
-rsys = modred(sys, [2;4;6;7;8;9], "Truncate"); 
-% x1 (uvel), x3(wvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
+rsys = modred(sys, [2;4;5;6;7;8;9], "Truncate"); 
+% x1 (uvel), x3(wvel), x10 (altitude) remaining as these will be measurable
 % states
 
 % will use the reduced system to design K gains matrix
@@ -46,12 +46,16 @@ end
 %system
 
 %for x-vel,z-vel, alt
-p1 = -1;
-p2 = -0.7;
-p3 = -0.6;
-p4 = -0.8;
+p1 = -0.12;
+p2 = -0.8;
+p3 = -0.12;
 
-K = place(A, B, [p1, p2, p3, p4])
+%for x-vel, pitchrate and alt
+% p1 = -0.6;
+% p2 = -0.0000001;
+% p3 = -0.8;
+
+K = place(A, B, [p1, p2, p3]);
 
 %close loop system with new K controller
 cloop_sys = ss(A-B*K, B, C, D, 0);
@@ -66,7 +70,7 @@ save('k_gains', "K")
 %run this script to initialize variables for RCAM_MIMO_implementation
 
 %getting statespace from the full model linearization
-linear_sys = load("rcam_linearized_ss@20ms_straight_and_level.mat").linsys1;
+linear_sys = load("rcam_linearized_ss@85ms_straight_and_level.mat").linsys1;
 A = linear_sys.A;
 B = linear_sys.B;
 C = linear_sys.C;
@@ -93,7 +97,7 @@ uo = [0;
     0;
     0.35515];
 
-TF = 2*60; %how long the sim runs for
+TF = 10*60; %how long the sim runs for
 
 %k gain
 k_gain = load("k_gains.mat");
