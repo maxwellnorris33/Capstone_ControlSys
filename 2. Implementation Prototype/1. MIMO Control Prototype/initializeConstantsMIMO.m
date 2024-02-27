@@ -46,8 +46,10 @@ end
 %system
 
 %for x-vel,z-vel, alt
+% change these numbers to change tuning, maybe low negatives.
+% for stable tune lines should be near straight 
 p1 = -1;
-p2 = -0.7;
+p2 = -0.5;
 p3 = -0.6;
 p4 = -0.8;
 
