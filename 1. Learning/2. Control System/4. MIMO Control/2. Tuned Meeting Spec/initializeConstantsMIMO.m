@@ -47,7 +47,7 @@ end
 
 %for x-vel,z-vel, alt
 p1 = -0.12;
-p2 = -0.8;
+p2 = -0.7;
 p3 = -0.12;
 
 %for x-vel, pitchrate and alt
