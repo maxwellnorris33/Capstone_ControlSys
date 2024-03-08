@@ -1,3 +1,4 @@
+%tutorial from christopher lum
 function [XDOT] = RCAM_model(X,U)
 
 %--------------------------STATE AND CONTROL VECTORS-----------------------
@@ -64,8 +65,6 @@ V_b = [x1;x2;x3];
 %----------------------3. AERODYNAMIC FORCE COEFFICIENTS-------------------
 %coeffs from openVSP is in windframe, need to rotate to body frame
 
-%NEED NEW CURVES
-
 %total lift force
 if alpha <=0.1396
     CL = 0.5171 + 5.1289*alpha;
@@ -84,12 +83,6 @@ CY = -0.176*(beta) - 0.0423*u3;
 
 FA_w = [-CD*Q*S; CY*Q*S; -CL*Q*S];
 
-%Moments
-
-CMx = 0.0504822*(-beta) + 0.5624073*x4 + -0.2815810*u1 + 0.0380536*u2 + 0.1456293*x6;
-CMy = 0.0563732 + -0.1095637*(alpha) + -8.6842443*x5 + -1.1188446*u3;
-CMz = -(-0.0461865*(beta) + 0.0237829*x6 + 0.0729666*u1 + -0.1758283*u2);
-
 %rotate these forces to Fb
 C_bw = [cos(beta)*cos(alpha) -sin(beta)*cos(alpha) -sin(alpha); sin(beta) cos(beta) 0; cos(beta)*sin(alpha) -sin(beta)*sin(alpha) cos(alpha)];
 FA_b = C_bw*FA_w;
@@ -97,10 +90,13 @@ FA_b = C_bw*FA_w;
 %--------------------6. AERODYNAMIC MOMENT ABOUT CG------------------------
 %normalize to aerodynamic moment about cog
 
-%NEED NEW CURVES, HAD TO ROTATE GIVEN MOMENT CURVES FROM WIND TO BODY FRAME
+%these moments are in the wind frame, need to rotate to body frame
+MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
+    (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
+    (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
-%C_bs = [cos(alpha) 0 -sin(alpha); 0 1 0; sin(alpha) 0 cos(alpha)];
-MAcg_b = C_bw*[CMx;CMy;CMz]*Q*S*cbar;
+%rotated moments to body frame
+MAcg_b = C_bw*MAcg_w ;
 
 %-------------------8. ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine
