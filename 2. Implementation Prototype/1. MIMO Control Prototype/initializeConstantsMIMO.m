@@ -18,8 +18,8 @@ D = linearizedSS.linsys1.D;
 sys = ss(A, B, C, D);
 
 %truncating system
-rsys = modred(sys, [2;4;6;7;8;9], "Truncate"); 
-% x1 (uvel), x3(wvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
+rsys = modred(sys, [2;3;4;6;7;8;9], "Truncate"); 
+% x1 (uvel),x5 pitch rate, x10 (altitude) remaining as these will be measurable
 % states
 
 % will use the reduced system to design K gains matrix
@@ -38,34 +38,18 @@ else
     disp('rsys is NOT observable or controllable');
 end
 
-%plot poles
-%pzplot(rsys)
-
 %will need to trial and error with the below poles to see which will
 %yield a K matrix which will behave the way we want it to with the reduced
 %system
 
-%for x-vel,z-vel, alt
 % change these numbers to change tuning, maybe low negatives.
 % for stable tune lines should be near straight 
-p1 = -1;
-p2 = -0.5;
-p3 = -0.6;
-p4 = -0.8;
+p1 = -0.9;
+p2 = -0.9;
+p3 = 0;
 
-K = place(A, B, [p1, p2, p3, p4])
-
-%close loop system with new K controller
-cloop_sys = ss(A-B*K, B, C, D, 0);
-%plotting close loop poles to determine stability
-%pzplot(cloop_sys)
-
+K = place(A, B, [p1, p2, p3])
 save('k_gains', "K")
-
-%if the above plot is stable, save the the above K gains into file to be
-%used in the simulation
-
-%run this script to initialize variables for RCAM_MIMO_implementation
 
 %getting statespace from the full model linearization
 linear_sys = load("rcam_linearized_ss@20ms_straight_and_level.mat").linsys1;
@@ -87,7 +71,7 @@ x0 = [20; %inital speed
     0];
 
 %initial control surface deflections
-%input IC trim point for straight and level flight @85m/s
+%input IC trim point for straight and level flight
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;

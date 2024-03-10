@@ -20,8 +20,8 @@ D = linearizedSS.linsys1.D;
 sys = ss(A, B, C, D);
 
 %truncating system
-rsys = modred(sys, [2;4;6;7;8;9], "Truncate"); 
-% x1 (uvel), x3(wvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
+rsys = modred(sys, [2;3;4;6;7;8;9], "Truncate"); 
+% x1 (uvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
 % states
 
 % will use the reduced system to design K gains matrix
@@ -39,40 +39,23 @@ if rank(Co) == rank(Ob) & (length(A) - rank(Co)) == 0 & (length(A) - rank(Ob)) =
 else
     disp('rsys is NOT observable or controllable');
 end
+
+%LQR tuning
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = eye(4);
-R_Sys = eye(4);
+Q_Sys = [5 0 0; 
+    0 1 0; 
+    0 0 1];
+
+R_Sys = [1 0 0 0; 
+    0 5 0 0; 
+    0 0 1 0;
+    0 0 0 3];
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
-%plot poles
-%pzplot(rsys)
 
-%will need to trial and error with the below poles to see which will
-%yield a K matrix which will behave the way we want it to with the reduced
-%system
-
-%for x-vel,z-vel, alt
-% change these numbers to change tuning, maybe low negatives.
-% for stable tune lines should be near straight 
-p1 = -1;
-p2 = -0.7;
-p3 = -0.6;
-p4 =0;
-
-K = place(A, B, [p1, p2, p3, p4])
-
-%close loop system with new K controller
-cloop_sys = ss(A-B*K, B, C, D, 0);
-%plotting close loop poles to determine stability
-%pzplot(cloop_sys)
-
-save('k_gains', "K")
-
-%if the above plot is stable, save the the above K gains into file to be
-%used in the simulation
-
-%run this script to initialize variables for RCAM_MIMO_implementation
+%saving LQR K matrix
+save('k_gains_LQR', "K_LQR")
 
 %getting statespace from the full model linearization
 linear_sys = load("rcam_linearized_ss@20ms_straight_and_level.mat").linsys1;
@@ -105,8 +88,8 @@ uo = [0;
 TF = 2*60; %how long the sim runs for
 
 %k gain
-k_gain = load("k_gains.mat");
-k = k_gain.K;
+k_gain_LQR = load("k_gains_LQR.mat")
+k = k_gain_LQR.K_LQR
 
 %initial longitude and latitude @honolulu airport
 lat0 = convert_coordinates(21, 18, 56.1708);
