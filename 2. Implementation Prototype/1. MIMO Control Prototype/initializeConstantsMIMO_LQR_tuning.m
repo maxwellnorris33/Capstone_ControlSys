@@ -42,14 +42,14 @@ end
 
 %LQR tuning
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [5 0 0; 
+Q_Sys = [2 0 0; 
     0 1 0; 
-    0 0 1];
+    0 0 10];
 
-R_Sys = [1 0 0 0; 
-    0 5 0 0; 
-    0 0 1 0;
-    0 0 0 3];
+R_Sys = [10 0 0 0; 
+    0 0.1 0 0; 
+    0 0 10 0;
+    0 0 0 100];
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
