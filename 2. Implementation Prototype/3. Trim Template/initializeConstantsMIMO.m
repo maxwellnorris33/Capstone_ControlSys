@@ -78,14 +78,14 @@ D = linear_sys.D;
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [18.1329; %inital speed
+x0 = [20; %inital speed
     0;
-    0.51757;
-    0;
-    0;
+    0.11625;
     0;
     0;
-    0.028535; 
+    0;
+    0;
+    0.0058125; 
     0];
 
 %initial control surface deflections
@@ -93,9 +93,9 @@ x0 = [18.1329; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    0.0483;
+    0.050707;
     0;
-    0.3473];
+    0.35514];
 
 TF = 10*60; %how long the sim runs for
 
@@ -108,7 +108,7 @@ lat0 = convert_coordinates(21, 18, 56.1708);
 lon0 = convert_coordinates(157, 51, 29.1348);
 
 %initial plane altitude (m)
-h0 = 40;
+h0 = 50;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;

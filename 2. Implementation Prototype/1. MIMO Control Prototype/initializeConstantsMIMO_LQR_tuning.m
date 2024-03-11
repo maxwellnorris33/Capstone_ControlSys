@@ -42,14 +42,14 @@ end
 
 %LQR tuning
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [2 0 0; 
-    0 1 0; 
+Q_Sys = [0.001 0 0; 
+    0 0 0; 
     0 0 10];
 
-R_Sys = [10 0 0 0; 
-    0 0.1 0 0; 
-    0 0 10 0;
-    0 0 0 100];
+R_Sys = [1 0 0 0; 
+    0 16 0 0; 
+    0 0 1 0;
+    0 0 0 970];
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
@@ -68,12 +68,12 @@ D = linear_sys.D;
 %initial state @ trim point for straight and level flight @85m/s
 x0 = [20; %inital speed
     0;
-    0.116;
+    0.11625;
     0;
     0;
     0;
     0;
-    0.0058; 
+    0.0058125; 
     0];
 
 %initial control surface deflections
@@ -83,9 +83,9 @@ x0 = [20; %inital speed
 uo = [0;
     0.050707;
     0;
-    0.35515];
+    0.35514];
 
-TF = 2*60; %how long the sim runs for
+TF = 20*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")
@@ -96,7 +96,7 @@ lat0 = convert_coordinates(21, 18, 56.1708);
 lon0 = convert_coordinates(157, 51, 29.1348);
 
 %initial plane altitude (m)
-h0 = 40;
+h0 = 50;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;
