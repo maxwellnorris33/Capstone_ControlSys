@@ -1,4 +1,4 @@
-%tutorial from christopher lum
+%adapted from christopher lum tutorial for RCAM aircraft
 function [XDOT] = RCAM_model(X,U)
 
 %--------------------------STATE AND CONTROL VECTORS-----------------------
@@ -23,30 +23,36 @@ u4 = U(4); %d_th1 (throttle 1)
 
 %--------------------------CONSTANTS---------------------------------------
 %Nominal Vehicle constants
-m = 7; %aircraft total mass (kg) %NEED THIS
+m = 5.738; %aircraft total mass
 
-cbar = 0.22283;                 %mean aerodynamic chord (m)
-S = 0.51220761;                    %wing planform area (m^2)
+cbar = 0.22283; %mean aerodynamic chord (m)
+S = 0.51220761; %wing planform area (m^2)
 b = 2.176;
 
-Xcg = 0.0934;            %x position of CoG in Fm (m) %THIS IS REFERENCE TO THE NOSE, NEED TO SUBTRACT BY DISTANCE TO THE LEADING EDGE FOR FM
-Ycg = 0;                    %y position of CoG in Fm (m)
-Zcg = -0.02;            %z position of CoG in Fm (m) %NEED THIS
+%FM is the frame of reference starting from the leading edge of the UAV,
+%positive x is forward, positive y is to the right wing, and positive z is
+%up. NOTE: it starts at the leading edge in our case as we have a square
+%wing
 
-Xac = 0.09856;            %x position of AC in Fm (m)
-Yac = 0.001;                    %y position of AC in Fm (m)
-Zac = 0;                    %z position of AC in Fm (m)
+Xcg = 0.0934; %x position of CoG in Fm (m) 
+Ycg = 0; %y position of CoG in Fm (m)
+Zcg = -0.02; %z position of CoG in Fm (m)
 
-%Engine Constants %NEED THIS
-Xapt1 = 0.75531;                 %est rn %x position of engine 1 force in Fm (m)
-Yapt1 = 0;              %y position of engine 1 force in Fm (m)
-Zapt1 = -0.02;               %z position of engine 1 force in Fm (m)
+Xac = 0.09856; %x position of AC in Fm (m)
+Yac = 0.001;%y position of AC in Fm (m)
+Zac = 0; %z position of AC in Fm (m)
+
+%Engine Constants
+Xapt1 = 0.75531; %est rn %x position of engine 1 force application in Fm (m)
+Yapt1 = 0; %position of engine 1 force in Fm (m)
+Zapt1 = -0.02; %z position of engine 1 force in Fm (m)
 
 %Other constants
-rho = 1.225;                %air density (kg/m^3)
-g = 9.81;                   %gravitational acceleration (m/s^2)
+rho = 1.225; %air density (kg/m^3)
+g = 9.81; %gravitational acceleration (m/s^2)
 
-%--------------------------2. INTERMEDIATE VARIABLES---------------------
+%--------------------------INTERMEDIATE VARIABLES------------------------
+
 %calculate airspeed
 Va = sqrt(x1^2 +x2^2 +x3^2);
 
@@ -62,7 +68,7 @@ wbe_b = [x4;x5;x6];
 V_b = [x1;x2;x3];
 
 
-%----------------------3. AERODYNAMIC FORCE COEFFICIENTS-------------------
+%--------------------AERODYNAMIC FORCE COEFFICIENTS----------------------
 %coeffs from openVSP is in windframe, need to rotate to body frame
 
 %total lift force
@@ -78,16 +84,19 @@ CD = 0.0338 + 0.0592*CL^2;
 %Calculating Sideforce
 CY = -0.176*(beta) - 0.0423*u3;
 
-%----------------------4. DIMENSIONAL AERODYNICAL FORCES-------------------
+%----------------------DIMENSIONAL AERODYNICAL FORCES-------------------
 %calculate the actual dimensional forces. These are in Fw
 
 FA_w = [-CD*Q*S; CY*Q*S; -CL*Q*S];
 
 %rotate these forces to Fb
-C_bw = [cos(beta)*cos(alpha) -sin(beta)*cos(alpha) -sin(alpha); sin(beta) cos(beta) 0; cos(beta)*sin(alpha) -sin(beta)*sin(alpha) cos(alpha)];
+C_bw = [cos(beta)*cos(alpha) -sin(beta)*cos(alpha) -sin(alpha); 
+    sin(beta) cos(beta) 0; 
+    cos(beta)*sin(alpha) -sin(beta)*sin(alpha) cos(alpha)];
+
 FA_b = C_bw*FA_w;
 
-%--------------------6. AERODYNAMIC MOMENT ABOUT CG------------------------
+%--------------------AERODYNAMIC MOMENT ABOUT CG------------------------
 %normalize to aerodynamic moment about cog
 
 %these moments are in the wind frame, need to rotate to body frame
@@ -96,9 +105,9 @@ MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
     (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
 %rotated moments to body frame
-MAcg_b = C_bw*MAcg_w ;
+MAcg_b = C_bw*MAcg_w;
 
-%-------------------8. ENGINE FORCE AND MOMENT-----------------------------
+%-------------------ENGINE FORCE AND MOMENT-----------------------------
 % Effect of engine. Calculate thrust force of engine
 if u4 <= 0
     F1 = 0;
@@ -121,12 +130,12 @@ mew1 = [Xcg - Xapt1; Yapt1 - Ycg; Zcg - Zapt1];
 MEcg1_b = cross(mew1, FE1_b);
 
 MEcg_b = MEcg1_b;
-%-------------------9. GRAVITY EFFECTS------------------------------------
+%-------------------GRAVITY EFFECTS------------------------------------
 g_b = [-g*sin(x8); g*cos(x8)*sin(x7); g*cos(x8)*cos(x7)];
 
 Fg_b = m*g_b;
 
-%-------------------10. STATE DERIVATIVES---------------------------------
+%-------------------STATE DERIVATIVES---------------------------------
 %inertia matrix
 Ib = m*[0.0802 0 0.108; 
         0 0.175 0; 
