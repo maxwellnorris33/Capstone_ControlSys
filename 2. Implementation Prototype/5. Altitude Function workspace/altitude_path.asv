@@ -1,0 +1,42 @@
+function [altRef, lastAlt, lastAltTime] = altitude_path(crnt_alt,trgt_alt, climb_rt, h0, clock, lastAlt, lastAltTime)
+    %---------- Variables ------------------
+    %crnt_alt = current altitude in m
+    % trgt_alt = targeted new altitude in m
+    % vertical climb rate in m/s
+    % h0 = starting altitude
+    % clock = current time
+    % lastAlt = last altitude durring last iteration of this function in m
+    % lastAltTime = last time of last altitude during last iteration
+
+    %------------- Code -------------------
+    %if currAlt is above or below desired alt, initiate climb/descent
+    %if currAlt is within 5% of desired alt, initiate alt lock
+
+    tolerance = 0.05*abs(trgt_alt-h0);
+    rampSignal = (clock)*clmbRate-(lastAltTime*clmbRate+h0-lastAlt);
+
+
+    if tolerance < climb_rt %setting absolute tolerance, this number will be higher as climb rate increases
+        tolerance = climb_rt;
+    end
+   
+    if crnt_alt < trgt_alt - tol
+        rampSignal = climb_rt*(clock-lastAltTime)+lastAlt;
+        altRef = rampSignal;
+        lastAlt = currAlt;
+        lastAltTime = clock;
+
+    elseif currAlt > desiredAlt + tol
+        rampSignal = -1*climb_rt*(clock-lastAltTime)+lastAlt;
+        altRef = rampSignal;
+        lastAlt = currAlt;
+        lastAltTime = clock;
+
+    else
+        altRef = desiredAlt-h0;
+        lastAlt = currAlt;
+        lastAltTime = clock;
+    end
+end
+
+
