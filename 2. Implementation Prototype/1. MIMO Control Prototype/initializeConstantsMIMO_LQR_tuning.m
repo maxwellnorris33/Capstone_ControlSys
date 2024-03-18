@@ -9,7 +9,7 @@ close all
 clc
 
 %extracting statespace A, B, C and D matrix
-linearizedSS = load('rcam_linearized_ss@20ms_straight_and_level.mat'); %varname is linsys1
+linearizedSS = load('rcam_linearized_ss@20ms_straight_and_level(2).mat'); %varname is linsys1
 
 A = linearizedSS.linsys1.A;
 B = linearizedSS.linsys1.B;
@@ -42,14 +42,14 @@ end
 
 %LQR tuning
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [0.001 0 0; 
+Q_Sys = [2 0 0; 
     0 0 0; 
-    0 0 10];
+    0 0 1];
 
 R_Sys = [1 0 0 0; 
-    0 16 0 0; 
+    0 10 0 0; 
     0 0 1 0;
-    0 0 0 970];
+    0 0 0 650];
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
@@ -58,7 +58,7 @@ K_LQR = -inv(R_Sys)*Sys.B'*P;
 save('k_gains_LQR', "K_LQR")
 
 %getting statespace from the full model linearization
-linear_sys = load("rcam_linearized_ss@20ms_straight_and_level.mat").linsys1;
+linear_sys = load("rcam_linearized_ss@20ms_straight_and_level(2).mat").linsys1;
 A = linear_sys.A;
 B = linear_sys.B;
 C = linear_sys.C;
@@ -68,12 +68,12 @@ D = linear_sys.D;
 %initial state @ trim point for straight and level flight @85m/s
 x0 = [20; %inital speed
     0;
-    0.11625;
+    -0.26733;
     0;
     0;
     0;
     0;
-    0.0058125; 
+    -0.013367; 
     0];
 
 %initial control surface deflections
@@ -81,9 +81,10 @@ x0 = [20; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    0.050707;
+    0.052779;
     0;
-    0.35514];
+    0.33409];
+
 
 TF = 10*60; %how long the sim runs for
 
