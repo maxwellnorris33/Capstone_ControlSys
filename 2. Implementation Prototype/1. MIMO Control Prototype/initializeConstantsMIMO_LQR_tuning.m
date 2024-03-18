@@ -9,7 +9,7 @@ close all
 clc
 
 %extracting statespace A, B, C and D matrix
-linearizedSS = load('rcam_linearized_ss@20ms_straight_and_level(2).mat'); %varname is linsys1
+linearizedSS = load('rcam_linearized_ss20ms_straight_and_level.mat'); %varname is linsys1
 
 A = linearizedSS.linsys1.A;
 B = linearizedSS.linsys1.B;
@@ -42,14 +42,14 @@ end
 
 %LQR tuning
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [2 0 0; 
+Q_Sys = [0.01 0 0; 
     0 0 0; 
-    0 0 1];
+    0 0 0.1];
 
 R_Sys = [1 0 0 0; 
-    0 10 0 0; 
+    0 50 0 0; 
     0 0 1 0;
-    0 0 0 650];
+    0 0 0 900];
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
@@ -58,7 +58,7 @@ K_LQR = -inv(R_Sys)*Sys.B'*P;
 save('k_gains_LQR', "K_LQR")
 
 %getting statespace from the full model linearization
-linear_sys = load("rcam_linearized_ss@20ms_straight_and_level(2).mat").linsys1;
+linear_sys = load("rcam_linearized_ss20ms_straight_and_level.mat").linsys1;
 A = linear_sys.A;
 B = linear_sys.B;
 C = linear_sys.C;
@@ -85,8 +85,7 @@ uo = [0;
     0;
     0.33409];
 
-
-TF = 10*60; %how long the sim runs for
+TF = 5*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")
