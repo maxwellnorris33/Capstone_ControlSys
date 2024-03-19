@@ -1,6 +1,10 @@
+close all
+clear
+clc
+
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [18; %inital speed
+x0 = [19.9; %inital speed
     0;
     0;
     0;
