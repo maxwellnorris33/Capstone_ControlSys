@@ -76,18 +76,14 @@ end
 
 % right
 for i = aileron_right_pwm
-    VT_r = [VT_r,interp1([800, 2120],[24.5, -24], i)];
+    VT_r = [VT_r,interp1([800, 2120],[24.5, -24], i];
 end
 
 %convert ruddervators to t-tail convention for simulation comparison
-ind = linspace(1,length(VT_r),length(VT_l));
-elv_ar = [];
-for i = ind
-    conversion_var_ar = [1 1; -1 1]*[VT_r(i); VT_l(i)];
-    elv_ar = [elv_ar,conversion_var_ar(1)];
-end
+conversion_var = [1 1; -1 1]*[VT_r; vtail_left_def];
+elevator_deflection = conversion_var(1)
 
 %defining the collected simulation data TODO
 
 %plotting
-plot(time_corrected,percent_thrust_array,time_corrected,elv_ar)
+plot(time_corrected,percent_thrust_array,time_corrected,elevator_deflection)
