@@ -20,8 +20,8 @@ D = linearizedSS.linsys1.D;
 sys = ss(A, B, C, D);
 
 %truncating system
-rsys = modred(sys, [2;3;4;6;7;8;9], "Truncate"); 
-% x1 (uvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
+rsys = modred(sys, [2;4;6;7;8;9], "Truncate"); 
+% x1 (uvel), x3 (zvel), x5 pitch rate, x10 (altitude) remaining as these will be measurable
 % states
 
 % will use the reduced system to design K gains matrix
@@ -41,15 +41,19 @@ else
 end
 
 %LQR tuning
-Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [0.01 0 0; 
-    0 0 0; 
-    0 0 0.1];
 
-R_Sys = [1 0 0 0; 
-    0 50 0 0; 
-    0 0 1 0;
-    0 0 0 900];
+%the larger the number for Q, the more the controller focuses on that state
+Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
+Q_Sys = [1 0 0 0; %horizontal vel
+    0 1 0 0; %vertical vel
+    0 0 1 0; %pitch rate
+    0 0 0 0.002]; %altitude
+
+%the large the number for R, the less control deflection is use
+R_Sys = [1 0 0 0; %aileron
+    0 50 0 0; %elevator
+    0 0 1 0; %rudder
+    0 0 0 600]; %throttle
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
@@ -85,7 +89,7 @@ uo = [0;
     0;
     0.33409];
 
-TF = 5*60; %how long the sim runs for
+TF = 10*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")
