@@ -42,3 +42,48 @@ rudder_deflection = conversion_var(2)
 thrust_percentage = interp1([1100, 1900],[0, 100], mean(thrust_pwm)) %1400 is trim
 
 mean(airspeed)
+
+%% Plotting the elevator and thrust real and simulation
+
+%preparing the time data
+time_slice = sliced_log.ATT.TimeS;
+time_slice(end)=[];
+strt = time_slice(1);
+time_corrected = [];
+for i = time_slice
+    time_corrected=[time_corrected,i-strt];
+end
+
+%preparing the thrust values
+percent_thrust_array = [];
+for i = thrust_pwm
+    percent_thrust_array = [percent_thrust_array,interp1([1100, 1900],[0, 100], i)];
+end
+
+%creating the elevator deflection array
+%convert avg aileron pwms to deflection angles
+VT_r = [];
+VT_l = [];
+
+%left
+for i = aileron_left_pwm
+    VT_l = [VT_l,interp1([2200, 800],[-26, 23.5], i)];
+end
+
+% right
+for i = aileron_right_pwm
+    VT_r = [VT_r,interp1([800, 2120],[24.5, -24], i)];
+end
+
+%convert ruddervators to t-tail convention for simulation comparison
+ind = linspace(1,length(VT_r),length(VT_l));
+elv_ar = [];
+for i = ind
+    conversion_var_ar = [1 1; -1 1]*[VT_r(i); VT_l(i)];
+    elv_ar = [elv_ar,conversion_var_ar(1)];
+end
+
+%defining the collected simulation data TODO
+
+%plotting
+plot(time_corrected,percent_thrust_array,time_corrected,elv_ar)
