@@ -44,16 +44,16 @@ end
 
 %the larger the number for Q, the more the controller focuses on that state
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [3 0 0 0; %horizontal vel
+Q_Sys = [0.1 0 0 0; %horizontal vel
     0 1 0 0; %vertical vel
     0 0 1 0; %pitch rate
-    0 0 0 0.001]; %altitude
+    0 0 0 1]; %altitude
 
 %the large the number for R, the less control deflection is use
 R_Sys = [1 0 0 0; %aileron
-    0 80 0 0; %elevator
+    0 1 0 0; %elevator
     0 0 1 0; %rudder
-    0 0 0 650]; %throttle
+    0 0 0 5]; %throttle
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
