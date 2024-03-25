@@ -91,3 +91,13 @@ end
 
 %plotting
 plot(time_corrected,percent_thrust_array,time_corrected,elv_ar)
+
+%% plotting altitude and speed.
+
+a = 1189;
+alt = sliced_log.GPS.Alt;
+load("data.mat")
+load("datas.mat")
+plot(time_corrected, airspeed)
+plot(altitutde,speed(:,1),speed(:,2),time_corrected, alt, time_corrected, airspeed)
+

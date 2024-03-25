@@ -51,9 +51,9 @@ Q_Sys = [0.1 0 0 0; %horizontal vel
 
 %the large the number for R, the less control deflection is use
 R_Sys = [1 0 0 0; %aileron
-    0 1 0 0; %elevator
+    0 1. 0 0; %elevator
     0 0 1 0; %rudder
-    0 0 0 5]; %throttle
+    0 0 0 15]; %throttle
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
