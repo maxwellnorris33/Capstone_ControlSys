@@ -91,9 +91,9 @@ FA_b = C_bw*FA_w;
 %normalize to aerodynamic moment about cog
 
 %these moments are in the wind frame, need to rotate to body frame
-MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
+MAcg_w = [(0.0498849*(-beta) + 0.5630736*x4 + 0.2814754*u1); %roll
     (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
-    (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
+    -(-0.0395123*(beta) + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
 %rotated moments to body frame
 MAcg_b = C_bw*MAcg_w ;

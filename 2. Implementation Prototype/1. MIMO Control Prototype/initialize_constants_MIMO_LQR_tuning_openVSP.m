@@ -89,7 +89,7 @@ uo = [0;
     0;
     0.33409];
 
-TF = 1*60; %how long the sim runs for
+TF = 5*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")
