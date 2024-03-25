@@ -29,12 +29,12 @@ cbar = 0.22283;                 %mean aerodynamic chord (m)
 S = 0.51220761;                    %wing planform area (m^2)
 b = 2.176;
 
-Xcg = 0.0591;            %x position of CoG in Fm (m) %THIS IS REFERENCE TO THE NOSE, NEED TO SUBTRACT BY DISTANCE TO THE LEADING EDGE FOR FM
+Xcg = 0.0641;            %x position of CoG in Fm (m) 
 Ycg = 0;                    %y position of CoG in Fm (m)
-Zcg = -0.02;            %z position of CoG in Fm (m) %NEED THIS
+Zcg = -0.04;            %z position of CoG in Fm (m)
 
-Xac = 0.09856;            %x position of AC in Fm (m)
-Yac = 0.001;                    %y position of AC in Fm (m)
+Xac = 0.0822;            %x position of AC in Fm (m)
+Yac = 0;                    %y position of AC in Fm (m)
 Zac = 0;                    %z position of AC in Fm (m)
 
 %Engine Constants %NEED THIS
@@ -66,18 +66,14 @@ V_b = [x1;x2;x3];
 %coeffs from openVSP is in windframe, need to rotate to body frame
 
 %total lift force
-if alpha <=0.1396
-    CL = 0.5171 + 5.1289*alpha;
-else
-    CL = -325.7*alpha^3 + 187.55*alpha^2 - 33.32*alpha + 3.115;
-end
+CL = 0.762 + 5.28*alpha - 13.5*alpha^2;
 
-%Total Drag Force (neglecting tail)
-CD = 0.0338 + 0.0592*CL^2;
+%Total Drag Force 
+CD = 0.124 + 0.812*alpha + 4.53*alpha^2;
 
 %Calculating Sideforce
-CY = -0.176*(beta) - 0.0423*u3;
-
+% OpenVSP: CY = -0.176*(beta) - 0.0423*u3;
+CY = 0.381855937977578*beta - 0.165392960537476*u3;
 %----------------------4. DIMENSIONAL AERODYNICAL FORCES-------------------
 %calculate the actual dimensional forces. These are in Fw
 
@@ -91,9 +87,19 @@ FA_b = C_bw*FA_w;
 %normalize to aerodynamic moment about cog
 
 %these moments are in the wind frame, need to rotate to body frame
-MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
-    (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
-    (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
+% OpenVSP: MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
+%     (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
+%     (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
+
+if u2 >=0
+    MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
+        (-8.9756*x5 -0.0461-0.4*alpha+0.604*alpha^2+0.0364246279361483*u2); %pitch
+        (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
+else
+    MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
+        (-8.9756*x5 -0.0461-0.4*alpha+0.604*alpha^2+0.0349860875426071*u2); %pitch
+        (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
+end
 
 %rotated moments to body frame
 MAcg_b = C_bw*MAcg_w ;
