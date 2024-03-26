@@ -72,12 +72,12 @@ D = linear_sys.D;
 %initial state @ trim point for straight and level flight @85m/s
 x0 = [20; %inital speed
     0;
-    -1.0339;
+    -0.26733;
     0;
     0;
     0;
     0;
-    -0.05172; 
+    -0.013367; 
     0];
 
 %initial control surface deflections
@@ -85,11 +85,11 @@ x0 = [20; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    0.0243934;
+    0.052779;
     0;
-    0.47803];
+    0.33409];
 
-TF = 1*60; %how long the sim runs for
+TF = 5*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")
