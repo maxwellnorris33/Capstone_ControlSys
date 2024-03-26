@@ -88,16 +88,84 @@ for i = ind
 end
 
 %defining the collected simulation data TODO
+load('data_elevator.mat')
+load('data_throttle.mat')
 
-%plotting
-plot(time_corrected,percent_thrust_array,time_corrected,elv_ar)
+%plotting trust
 
-%% plotting altitude and speed.
+figure
+ax = gca;
+set(gca,'FontSize',12)
+plot(time_corrected,percent_thrust_array,'LineWidth',2,'Color',[220/255 117/255 0])
+hold on
+plot(thrtl_dt,'LineWidth',2,'Color',[0 0 1])
+legend({'Flight Data', 'Our Control System'},'Location','northwest')
+xlabel('Time (s)')
+ylabel('% Throttle')
+grid on
+ax = gca;
+ax.GridAlpha = 0.55;  % [R, G, B]
+title('Simulation vs. Flight Throttle Comparison')
+hold off
+%plotting elevator
 
-a = 1189;
-alt = sliced_log.GPS.Alt;
-load("data.mat")
-load("datas.mat")
-plot(time_corrected, airspeed)
-plot(altitutde,speed(:,1),speed(:,2),time_corrected, alt, time_corrected, airspeed)
+figure
+ax = gca;
+set(gca,'FontSize',12)
+plot(time_corrected,elv_ar,'LineWidth',2,'Color',[220/255 117/255 0])
+hold on
+plot(elvtr_dt,'LineWidth',2,'Color',[0 0 1])
+legend({'Flight Data', 'Our Control System'},'Location','northwest')
+xlabel('Time (s)')
+ylabel('Elevator angle (Degrees)')
+grid on
+ax = gca;
+ax.GridAlpha = 0.55;  % [R, G, B]
+title('Simulation vs. Flight Elevator Comparison')
+hold off
+%% graphing alt and speed for poster
 
+%getting real data
+time_alt = sliced_log.GPS.TimeS-strt;
+altitude_real = sliced_log.GPS.Alt-1196.71;
+speed_time = sliced_log.ARSP.TimeS-strt;
+
+length(altitude_real)
+length(airspeed)
+length(speed_time)
+
+%importing sim data from files
+load("data_alt.mat")
+load("speed.mat")
+
+%plotting alt
+figure
+ax = gca;
+set(gca,'FontSize',12)
+plot(time_alt,altitude_real,'LineWidth',2,'Color',[220/255 117/255 0])
+hold on 
+plot(altitude,'LineWidth',2,'Color',[0 0 1])
+legend({'Flight Data', 'Our Control System'},'Location','northwest')
+xlabel('Time (s)')
+ylabel('Altitude relative to the ground (m)')
+grid on
+ax = gca;
+ax.GridAlpha = 0.55;  % [R, G, B]
+title('Simulation vs. Flight Altitude Comparison')
+hold off
+
+%plotting speed
+figure
+ax = gca;
+plot(speed_time,smooth(airspeed),'LineWidth',2,'Color',[220/255 117/255 0])
+hold on 
+plot(speed,'LineWidth',2,'Color',[0 0 1])
+legend({'Flight Data', 'Our Control System'},'Location','northwest')
+xlabel('Time (s)')
+ylabel('Airspeed (m/s)')
+title('Simulation vs. Flight Airspeed Comparison')
+grid on
+ax = gca;
+ax.GridAlpha = 0.55;  % [R, G, B]
+set(gca,'FontSize',12)
+hold off

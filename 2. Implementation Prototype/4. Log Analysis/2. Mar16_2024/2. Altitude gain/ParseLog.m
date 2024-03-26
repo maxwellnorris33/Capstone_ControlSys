@@ -105,21 +105,30 @@ load("datas.mat")
 
 %plotting alt
 figure
-plot(time_alt,altitude)
+ax = gca;
+set(gca,'FontSize',12)
+plot(time_alt,altitude,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
-plot(altitutde)
+plot(altitutde,'LineWidth',2,'Color',[0 0 1])
 hold off
 legend({'Flight Data', 'Our Control System'},'Location','northwest')
 xlabel('Time (s)')
 ylabel('Altitude relative to the ground (m)')
+grid on
+ax = gca;
+ax.GridAlpha = 0.55;  % [R, G, B]
 title('Simulation vs. Flight Altitude Comparison')
 
 %plotting speed
-plot(speed_time,smooth(airspeed))
-hold on 
-plot(speed)
-hold off
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
-xlabel('Time (s)')
-ylabel('Airspeed (m/s)')
-title('Simulation vs. Flight Airspeed Comparison')
+% plot(speed_time,smooth(airspeed),'LineWidth',2,'Color',[220/255 117/255 0])
+% hold on 
+% plot(speed,'LineWidth',2,'Color',[0 0 1])
+% hold off
+% legend({'Flight Data', 'Our Control System'},'Location','northwest')
+% xlabel('Time (s)')
+% ylabel('Airspeed (m/s)')
+% title('Simulation vs. Flight Airspeed Comparison')
+% grid on
+% ax = gca;
+% ax.GridAlpha = 0.55;  % [R, G, B]
+% set(gca,'FontSize',12)
