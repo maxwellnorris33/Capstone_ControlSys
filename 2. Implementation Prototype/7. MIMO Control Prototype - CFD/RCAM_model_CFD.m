@@ -23,13 +23,13 @@ u4 = U(4); %d_th1 (throttle 1)
 
 %--------------------------CONSTANTS---------------------------------------
 %Nominal Vehicle constants
-m = 5.73; %aircraft total mass (kg) %NEED THIS
+m = 5.73; %aircraft total mass (kg) 
 
 cbar = 0.22283;                 %mean aerodynamic chord (m)
 S = 0.51220761;                    %wing planform area (m^2)
 b = 2.176;
 
-Xcg = 0.0641;            %x position of CoG in Fm (m) 
+Xcg = 0.0631;            %x position of CoG in Fm (m) 
 Ycg = 0;                    %y position of CoG in Fm (m)
 Zcg = -0.04;            %z position of CoG in Fm (m)
 
@@ -66,7 +66,7 @@ V_b = [x1;x2;x3];
 %coeffs from openVSP is in windframe, need to rotate to body frame
 
 %total lift force
-CL = 0.762 + 5.28*alpha - 13.5*alpha^2;
+CL = 0.568 + 4.83*alpha - 7.74*alpha^2;
 
 %Total Drag Force 
 CD = 0.124 + 0.812*alpha + 4.53*alpha^2;
@@ -91,13 +91,14 @@ FA_b = C_bw*FA_w;
 %     (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
 %     (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
-if u2 >=0
+%if pitching up (u2>0), coefficient is different than pitching down
+if u2 >= 0
     MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
-        (-8.9756*x5 -0.0461-0.4*alpha+0.604*alpha^2+0.0364246279361483*u2); %pitch
+        (-8.9756*x5 -0.0487 - 0.422*alpha + 0.637*alpha^2 + 1.37862002457027*u2); %pitch
         (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
 else
     MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
-        (-8.9756*x5 -0.0461-0.4*alpha+0.604*alpha^2+0.0349860875426071*u2); %pitch
+        (-8.9756*x5 -0.0487 - 0.422*alpha + 0.637*alpha^2 + 0.661041663087895*u2); %pitch
         (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
 end
 
