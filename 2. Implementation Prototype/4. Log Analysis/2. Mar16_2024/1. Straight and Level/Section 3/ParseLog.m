@@ -99,7 +99,7 @@ set(gca,'FontSize',12)
 plot(time_corrected,percent_thrust_array,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
 plot(thrtl_dt,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('% Throttle')
 grid on
@@ -115,7 +115,7 @@ set(gca,'FontSize',12)
 plot(time_corrected,elv_ar,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
 plot(elvtr_dt,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Elevator angle (Degrees)')
 grid on
@@ -145,7 +145,7 @@ set(gca,'FontSize',12)
 plot(time_alt,altitude_real,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
 plot(altitude,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Altitude relative to the ground (m)')
 grid on
@@ -160,7 +160,7 @@ ax = gca;
 plot(speed_time,smooth(airspeed),'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
 plot(speed,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Airspeed (m/s)')
 title('Simulation vs. Flight Airspeed Comparison')

@@ -13,8 +13,8 @@ close all
 
 
 %update these as needed based on log object
-lower_slice = 186314;
-upper_slice = 227867;
+lower_slice = 131802;
+upper_slice = 189548;
 slice_type = 'LineNo';
 
 log = Ardupilog()
