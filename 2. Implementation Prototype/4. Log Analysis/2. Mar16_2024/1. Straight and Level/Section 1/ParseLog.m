@@ -7,8 +7,8 @@ close all
 
 %slice around the flight, LineNo is a parameter from the bin file, not the
 %row number
-lower_slice = 514580; %change this
-upper_slice = 530768; %change this
+lower_slice = 456932; %updated for level section 1
+upper_slice = 470315; %updated for level section 1
 slice_type = 'LineNo';
 
 log = Ardupilog()

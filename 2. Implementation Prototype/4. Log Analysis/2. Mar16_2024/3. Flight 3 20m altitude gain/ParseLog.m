@@ -8,9 +8,13 @@ close all
 %slice around the flight, LineNo is a parameter from the bin file, not the
 %row number
 
+% Down Case: lower_slice 131802 upper_slice 189548
+% Up Case: lower_slice 186314 upper_slice 227867
+
+
 %update these as needed based on log object
-lower_slice = 186314; 
-upper_slice = 227867; 
+lower_slice = 186314;
+upper_slice = 227867;
 slice_type = 'LineNo';
 
 log = Ardupilog()
@@ -100,7 +104,7 @@ set(gca,'FontSize',12)
 plot(time_corrected,percent_thrust_array,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
 plot(thrtl_dt,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','southwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('% Throttle')
 grid on
@@ -118,7 +122,7 @@ set(gca,'FontSize',12)
 plot(time_corrected,elv_ar,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
 plot(elvtr_dt,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','southwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Elevator angle (Degrees)')
 grid on
@@ -126,6 +130,7 @@ ax = gca;
 ax.GridAlpha = 0.55;  % [R, G, B]
 title('Simulation vs. Flight Elevator Comparison')
 hold off
+
 %% graphing alt and speed for poster
 
 %getting real data
@@ -148,7 +153,7 @@ set(gca,'FontSize',12)
 plot(time_alt,altitude_real,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
 plot(altitude,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','northwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Altitude relative to the ground (m)')
 grid on
@@ -163,7 +168,7 @@ ax = gca;
 plot(speed_time,smooth(airspeed),'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
 plot(speed,'LineWidth',2,'Color',[0 0 1])
-legend({'Flight Data', 'Our Control System'},'Location','southwest')
+legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Airspeed (m/s)')
 title('Simulation vs. Flight Airspeed Comparison')

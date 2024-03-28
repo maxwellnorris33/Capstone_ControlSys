@@ -100,7 +100,7 @@ lat0 = convert_coordinates(21, 18, 56.1708);
 lon0 = convert_coordinates(157, 51, 29.1348);
 
 %initial plane altitude (m)
-h0 = 50;
+h0 = 40;
 
 % Define Actuator Saturation Limits
 u1min = -25*pi/180;
