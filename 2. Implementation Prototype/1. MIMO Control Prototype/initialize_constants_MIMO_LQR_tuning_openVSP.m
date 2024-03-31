@@ -103,14 +103,14 @@ lon0 = convert_coordinates(157, 51, 29.1348);
 h0 = 50;
 
 % Define Actuator Saturation Limits
-u1min = -25*pi/180;
-u1max = 25*pi/180;
+u1min = -28*pi/180;
+u1max = 22*pi/180;
 
-u2min = -25*pi/180;
-u2max = 10*pi/180;
+u2min = -40*pi/180;
+u2max = 56*pi/180;
 
-u3min = -30*pi/180;
-u3max = 30*pi/180;
+u3min = -48*pi/180;
+u3max = 48*pi/180;
 
 u4min = 0;
 u4max = 1;
