@@ -71,14 +71,14 @@ D = linear_sys.D;
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
 x0 = [20; %inital speed
-    0;
-    -0.46907;
-    0;
-    0;
-    0;
-    0;
-    -0.023455; 
-    0];
+    0; %velocity in y axis
+    -0.46907; %velocity in z axis
+    0; %angular rate about body x axis
+    0; %angular rate about body y axis
+    0; %angular rate about body z axis
+    0; %bank angle (rad)
+    -0.023455; %pitch angle
+    0]; %yaw angle
 
 %initial control surface deflections
 %input IC trim point for straight and level flight @85m/s
