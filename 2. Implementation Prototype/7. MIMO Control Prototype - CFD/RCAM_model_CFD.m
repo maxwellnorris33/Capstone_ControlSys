@@ -72,8 +72,8 @@ CL = 0.568 + 4.83*alpha - 7.74*alpha^2;
 CD = 0.124 + 0.812*alpha + 4.53*alpha^2;
 
 %Calculating Sideforce
-% OpenVSP: CY = -0.176*(beta) - 0.0423*u3;
-CY = 0.381855937977578*beta - 0.165392960537476*u3;
+%CY = -0.381855937977578*beta - 0.165392960537476*u3;
+CY = -0.176*(beta) - 0.0423*u3;
 %----------------------4. DIMENSIONAL AERODYNICAL FORCES-------------------
 %calculate the actual dimensional forces. These are in Fw
 
@@ -86,20 +86,15 @@ FA_b = C_bw*FA_w;
 %--------------------6. AERODYNAMIC MOMENT ABOUT CG------------------------
 %normalize to aerodynamic moment about cog
 
-%these moments are in the wind frame, need to rotate to body frame
-% OpenVSP: MAcg_w = [(0.0498849*beta + 0.5630736*x4 + 0.2814754*u1); %roll
-%     (0.0567244-0.1194170*(alpha) - 8.9756*x5 + -1.1049921*u2); %pitch
-%     (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
-
 %if pitching up (u2>0), coefficient is different than pitching down
 if u2 >= 0
     MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
         (-8.9756*x5 -0.0487 - 0.422*alpha + 0.637*alpha^2 + 1.37862002457027*u2); %pitch
-        (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
+        (0.0595315*x6 - 0.0386810936607222*beta + 0.0142445485450575*u3)]*Q*S*cbar; %yaw
 else
     MAcg_w = [(0.5630736*x4 - 0.218178645081431*beta + 2.21808931113144*u1); %roll
         (-8.9756*x5 -0.0487 - 0.422*alpha + 0.637*alpha^2 + 0.661041663087895*u2); %pitch
-        (0.0595315*x6 + 0.723911207831643*beta - 0.450367297691894*u3)]*Q*S*cbar; %yaw
+        (0.0595315*x6 - 0.0386810936607222*beta + 0.0142445485450575*u3)]*Q*S*cbar; %yaw
 end
 
 %rotated moments to body frame
