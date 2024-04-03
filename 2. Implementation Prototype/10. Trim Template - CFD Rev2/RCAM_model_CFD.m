@@ -69,28 +69,28 @@ V_b = [x1;x2;x3];
 if u2 >= 0
     CL = (0.568 + 4.83*alpha - 7.74*alpha^2) ... %CL wrt angle of attack
         + (7.784*x5) ... %CL wrt pitch rate
-        + (-0.446265515867565 * u2); %CL wrt elevator
+        + (0.446265515867565 * u2); %CL wrt elevator
 else
     CL = (0.568 + 4.83*alpha - 7.74*alpha^2) ... %CL wrt angle of attack
         + (7.784*x5) ... %CL wrt pitch rate
-        + (-0.428640876296062 * u2); %CL wrt elevator
+        + (0.428640876296062 * u2); %CL wrt elevator
 end
 
 %Total Drag Force 
 if u2 >=0
     CD = (0.124 + 0.812*alpha + 4.53*alpha^2) ... %CD wrt angle of attack
-        + (0.202*x5) ... %CD wrt pitch rate
+        + (0.20267402*x5) ... %CD wrt pitch rate
         + (0.0102540050707052 * u2); %CD wrt elevator
 else
     CD = (0.124 + 0.812*alpha + 4.53*alpha^2) ... %CD wrt angle of attack
-        + (0.202*x5) ... %CD wrt pitch rate
+        + (0.2026740*x5) ... %CD wrt pitch rate
         + (-0.022900465888788 * u2); %CD wrt elevator
 end
 %Total Sideforce
 % OpenVSP: CY = -0.176*(beta) - 0.0423*u3;
-CY = 0.381855937977578*beta ... %CY wrt sideslip
-    - 0.0198*x4 ... %CY wrt roll rate
-    - 0.184*x6 ... %CY wrt yaw rate
+CY = - 0.381855937977578*beta ... %CY wrt sideslip
+    + 0.0198*x4 ... %CY wrt roll rate
+    + 0.184*x6 ... %CY wrt yaw rate
     - 0.165392960537476*u3 ... %CY wrt rudder
     + 0.0273768615093121*u1; %CY wrt aileron
 
@@ -112,13 +112,13 @@ FA_b = C_bw*FA_w;
 %     (-0.0395123*beta + 0.0595315*x6 -0.0207352*u3)]*Q*S*cbar; %yaw
 
 if u2 >=0
-    MAcg_w = [(0.5630736*x4 + 0.155*x6 - 0.0446985307848685*beta + 0.427015721674515*u1 + 0.0422366661337774*u3); %roll
-        (-8.9756*x5 - 0.00599 - 0.197*alpha + 0.199352667127091*u2); %pitch
-        (0.0595315*x6 - 0.0281*x4 + 0.154163878358508*beta - 0.0264143821157647*u1 - 0.0921527135445746*u3)]*Q*S*cbar; %yaw
+    MAcg_w = [(0.5630736*x4 + 0.1550179*x6 - 0.0446985307848685*beta + 0.427015721674515*u1 + 0.0422366661337774*u3); %roll
+        (-8.7067*x5 - 0.00599 - 0.197*alpha - 0.199352667127091*u2); %pitch
+        (-0.0595315*x6 - 0.0281*x4 + 0.154163878358508*beta + 0.0264143821157647*u1 + 0.0921527135445746*u3)]*Q*S*cbar; %yaw
 else
-    MAcg_w = [(0.5630736*x4 + 0.155*x6 - 0.0446985307848685*beta + 0.427015721674515*u1 + 0.0422366661337774*u3); %roll
-        (-8.9756*x5 - 0.00599 - 0.197*alpha + 0.228014491962055*u2); %pitch
-        (0.0595315*x6 - 0.0281*x4 + 0.154163878358508*beta - 0.0264143821157647*u1 - 0.09215271354457462*u3)]*Q*S*cbar; %yaw
+    MAcg_w = [(0.5630736*x4 + 0.1550179*x6 - 0.0446985307848685*beta + 0.427015721674515*u1 + 0.0422366661337774*u3); %roll
+        (-8.7067*x5 - 0.00599 - 0.197*alpha - 0.199352667127091*u2); %pitch
+        (-0.0595315*x6 - 0.0281*x4 + 0.154163878358508*beta + 0.0264143821157647*u1 + 0.0921527135445746*u3)]*Q*S*cbar; %yaw
 end
 
 %rotated moments to body frame
