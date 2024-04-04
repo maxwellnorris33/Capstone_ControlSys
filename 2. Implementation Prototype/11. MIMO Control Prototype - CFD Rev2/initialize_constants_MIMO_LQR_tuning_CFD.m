@@ -70,7 +70,7 @@ D = linear_sys.D;
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [20; %inital speed
+x0 = [18; %inital speed
     0;
     -0.36715;
     0;
