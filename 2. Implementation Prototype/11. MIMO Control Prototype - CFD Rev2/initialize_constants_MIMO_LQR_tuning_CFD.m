@@ -44,16 +44,16 @@ end
 
 %the larger the number for Q, the more the controller focuses on that state
 Sys = ss(rsys.A,rsys.B,rsys.C,rsys.D);
-Q_Sys = [0.1 0 0 0; %horizontal vel
+Q_Sys = [30 0 0 0; %horizontal vel
     0 1 0 0; %vertical vel
     0 0 1 0; %pitch rate
-    0 0 0 1]; %altitude
+    0 0 0 0.1]; %altitude
 
 %the large the number for R, the less control deflection is use
 R_Sys = [1 0 0 0; %aileron
     0 1 0 0; %elevator
     0 0 1 0; %rudder
-    0 0 0 30]; %throttle
+    0 0 0 60]; %throttle
 
 [P,~,~] = care(Sys.A,Sys.B,Q_Sys,R_Sys);
 K_LQR = -inv(R_Sys)*Sys.B'*P;
@@ -70,14 +70,14 @@ D = linear_sys.D;
 
 % Define initialized constants
 %initial state @ trim point for straight and level flight @85m/s
-x0 = [18; %inital speed
+x0 = [20; %inital speed
     0;
-    -0.36715;
-    0;
-    0;
+    -0.45018;
     0;
     0;
-    -0.018359; 
+    0;
+    0.5;
+    -0.022511; 
     0];
 
 %initial control surface deflections
@@ -85,11 +85,11 @@ x0 = [18; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    -0.062361;
+    -0.014282;
     0;
-    0.51941];
+    0.37572];
 
-TF = 10*60; %how long the sim runs for
+TF = 1.5*60; %how long the sim runs for
 
 %k gain
 k_gain_LQR = load("k_gains_LQR.mat")

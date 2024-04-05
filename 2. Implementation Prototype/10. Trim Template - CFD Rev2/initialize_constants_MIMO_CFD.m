@@ -6,12 +6,12 @@ clc
 %initial state @ trim point for straight and level flight @85m/s
 x0 = [20; %inital speed
     0;
-    -0.36715;
+    0.44285;
     0;
     0;
     0;
     0;
-    -0.018359; 
+    -0.022144; 
     0];
 
 %initial control surface deflections
@@ -19,9 +19,9 @@ x0 = [20; %inital speed
 %since we linearized at the original trim point, all control inputs are
 %centered at zero
 uo = [0;
-    -0.062361;
+    -0.016123;
     0;
-    0.51941];
+    0.51174];
 
 TF = 10*60; %how long the sim runs for
 
