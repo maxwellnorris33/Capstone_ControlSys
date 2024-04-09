@@ -13,8 +13,8 @@ close all
 
 
 %update these as needed based on log object
-lower_slice = 131802;
-upper_slice = 189548;
+lower_slice = 186314;
+upper_slice = 227867;
 slice_type = 'LineNo';
 
 log = Ardupilog()
@@ -103,7 +103,7 @@ ax = gca;
 set(gca,'FontSize',12)
 plot(time_corrected,percent_thrust_array,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
-plot(thrtl_dt,'LineWidth',2,'Color',[0 0 1])
+plot(thrtl_dt.Time(587:end)-8, thrtl_dt.Data(587:end),'LineWidth',2,'Color',[0 0 1])
 legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('% Throttle')
@@ -121,7 +121,7 @@ ax = gca;
 set(gca,'FontSize',12)
 plot(time_corrected,elv_ar,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on
-plot(elvtr_dt,'LineWidth',2,'Color',[0 0 1])
+plot(elvtr_dt.Time(587:end)-8, elvtr_dt.Data(587:end),'LineWidth',2,'Color',[0 0 1])
 legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Elevator angle (Degrees)')
@@ -152,7 +152,7 @@ ax = gca;
 set(gca,'FontSize',12)
 plot(time_alt,altitude_real,'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
-plot(altitude,'LineWidth',2,'Color',[0 0 1])
+plot(altitude.Time(587:end)-8, altitude.Data(587:end),'LineWidth',2,'Color',[0 0 1])
 legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Altitude relative to the ground (m)')
@@ -167,7 +167,7 @@ figure
 ax = gca;
 plot(speed_time,smooth(airspeed),'LineWidth',2,'Color',[220/255 117/255 0])
 hold on 
-plot(speed,'LineWidth',2,'Color',[0 0 1])
+plot(speed.Time(587:end)-8, speed.Data(587:end),'LineWidth',2,'Color',[0 0 1])
 legend({'Flight Data', 'Our Control System'},'Location','best')
 xlabel('Time (s)')
 ylabel('Airspeed (m/s)')
